@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { User, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, AlertCircle, Loader2 } from 'lucide-react';
 import { loginSuperAdmin } from '../services/api';
 import { saveSession } from '../utils/auth';
+import appLogo from '../assets/app-logo.png';
 
 interface LoginProps {
   onLoginSuccess: () => void;
@@ -12,7 +13,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
   const [password, setPassword] = useState('Admin@123#');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
-  
+
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -29,7 +30,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
 
     try {
       const response = await loginSuperAdmin(emailOrCode, password);
-      
+
       // Save credentials if login succeeds
       saveSession({
         token: response.tokenData.token,
@@ -39,7 +40,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
         firstName: response.firstName,
         lastName: response.lastName
       });
-      
+
       onLoginSuccess();
     } catch (err: any) {
       setErrorMsg(err.message || 'Authentication failed. Please verify credentials and network.');
@@ -49,34 +50,58 @@ export default function Login({ onLoginSuccess }: LoginProps) {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#fcfbf9] p-4 md:p-6 lg:p-8 select-none">
-      <div className="w-full max-w-6xl bg-white rounded-3xl shadow-premium overflow-hidden flex flex-col md:flex-row min-h-[680px]">
-        
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#fcfbf9] p-4 md:p-6 lg:p-8 select-none relative overflow-hidden">
+      
+      {/* Soft Background Glowing Light Leaks (Orbs) */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-login-gold/5 blur-[120px] pointer-events-none select-none translate-x-24 -translate-y-24" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] rounded-full bg-emerald-500/5 blur-[120px] pointer-events-none select-none -translate-x-24 translate-y-24" />
+
+      {/* Abstract Modern Concentric Tech Rings - Top Right */}
+      <div className="absolute top-0 right-0 w-96 h-96 text-login-gold/10 pointer-events-none transform translate-x-24 -translate-y-24 select-none">
+        <svg className="w-full h-full" viewBox="0 0 200 200" fill="none" stroke="currentColor" strokeWidth="0.8">
+          <circle cx="100" cy="100" r="95" />
+          <circle cx="100" cy="100" r="75" strokeDasharray="3 3" />
+          <circle cx="100" cy="100" r="55" />
+          <circle cx="100" cy="100" r="35" strokeDasharray="1 5" strokeWidth="2" />
+          <line x1="100" y1="5" x2="100" y2="195" strokeDasharray="2 4" />
+          <line x1="5" y1="100" x2="195" y2="100" strokeDasharray="2 4" />
+        </svg>
+      </div>
+
+      {/* Abstract Modern Concentric Tech Rings - Bottom Left */}
+      <div className="absolute bottom-0 left-0 w-96 h-96 text-login-gold/10 pointer-events-none transform -translate-x-24 translate-y-24 select-none">
+        <svg className="w-full h-full" viewBox="0 0 200 200" fill="none" stroke="currentColor" strokeWidth="0.8">
+          <circle cx="100" cy="100" r="95" />
+          <circle cx="100" cy="100" r="75" strokeDasharray="3 3" />
+          <circle cx="100" cy="100" r="55" />
+          <circle cx="100" cy="100" r="35" strokeDasharray="1 5" strokeWidth="2" />
+          <line x1="100" y1="5" x2="100" y2="195" strokeDasharray="2 4" />
+          <line x1="5" y1="100" x2="195" y2="100" strokeDasharray="2 4" />
+        </svg>
+      </div>
+
+      <div className="w-full max-w-6xl bg-white rounded-3xl shadow-premium overflow-hidden flex flex-col md:flex-row min-h-[680px] z-10">
+
         {/* Left Side: Premium Brand Branding Card */}
         <div className="w-full md:w-5/12 bg-login-green text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden min-h-[400px] md:min-h-[auto]">
           {/* Decorative shapes background */}
           <div className="absolute inset-0 bg-radial-at-t from-[#0e543b]/40 to-transparent pointer-events-none" />
-          
+
           <div className="z-10 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-login-gold" />
             <span className="text-xs font-semibold tracking-wider text-emerald-100 uppercase">Secure & Protected</span>
           </div>
 
-          <div className="z-10 text-center my-auto py-8">
+          <div className="z-10 text-center">
             {/* Symmetrical Knot Gold Logo Emblem */}
-            <div className="relative inline-block mb-6 animate-pulse">
-              <svg className="w-28 h-28 text-login-gold mx-auto" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Outermost ring loops */}
-                <path d="M100 20 C125 20 135 45 135 60 C135 75 115 90 100 90 C85 90 65 75 65 60 C65 45 75 20 100 20 Z" stroke="currentColor" strokeWidth="6" strokeLinecap="round"/>
-                <path d="M100 180 C125 180 135 155 135 140 C135 125 115 110 100 110 C85 110 65 125 65 140 C65 155 75 180 100 180 Z" stroke="currentColor" strokeWidth="6" strokeLinecap="round"/>
-                <path d="M20 100 C20 125 45 135 60 135 C75 135 90 115 90 100 C90 85 75 65 60 65 C45 65 20 75 20 100 Z" stroke="currentColor" strokeWidth="6" strokeLinecap="round"/>
-                <path d="M180 100 C180 125 155 135 140 135 C125 135 110 115 110 100 C110 85 125 65 140 65 C155 65 180 75 180 100 Z" stroke="currentColor" strokeWidth="6" strokeLinecap="round"/>
-                {/* Central interlacing box */}
-                <rect x="68" y="68" width="64" height="64" rx="12" stroke="currentColor" strokeWidth="6" />
-                <circle cx="100" cy="100" r="14" stroke="currentColor" strokeWidth="4" />
-              </svg>
+            <div className="relative inline-block mb-6">
+              <img
+                src={appLogo}
+                alt="App Logo"
+                className="w-[150px] h-[150px] object-contain mx-auto"
+              />
             </div>
-            
+
             <h1 className="text-3xl lg:text-4xl font-extrabold tracking-wider text-white uppercase mb-1">
               MAITRISER ZONE
             </h1>
@@ -94,9 +119,9 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           {/* Curved lines SVG overlay */}
           <div className="absolute bottom-0 left-0 right-0 h-24 overflow-hidden pointer-events-none opacity-20">
             <svg className="w-full h-full text-login-gold" viewBox="0 0 400 100" fill="none" stroke="currentColor">
-              <path d="M 0 60 Q 200 110 400 60" strokeWidth="1.5"/>
-              <path d="M 0 75 Q 200 125 400 75" strokeWidth="1"/>
-              <path d="M 0 90 Q 200 140 400 90" strokeWidth="0.5"/>
+              <path d="M 0 60 Q 200 110 400 60" strokeWidth="1.5" />
+              <path d="M 0 75 Q 200 125 400 75" strokeWidth="1" />
+              <path d="M 0 90 Q 200 140 400 90" strokeWidth="0.5" />
             </svg>
           </div>
 
@@ -110,13 +135,9 @@ export default function Login({ onLoginSuccess }: LoginProps) {
 
         {/* Right Side: Form Inputs */}
         <div className="w-full md:w-7/12 p-8 md:p-12 lg:p-16 flex flex-col justify-between bg-white relative">
-          
-          {/* Header row */}
-          <div className="flex justify-between items-center mb-6">
-            <span className="text-xs font-semibold text-slate-400 tracking-wider flex items-center gap-1 uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-ping" /> Secure & Protected
-            </span>
-          </div>
+
+          {/* Header spacer */}
+          <div className="h-6 mb-6" />
 
           {/* Form container */}
           <div className="my-auto max-w-md w-full mx-auto">
@@ -140,7 +161,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              
+
               {/* Username field */}
               <div>
                 <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
@@ -199,8 +220,8 @@ export default function Login({ onLoginSuccess }: LoginProps) {
                   />
                   <span className="font-medium">Remember me</span>
                 </label>
-                <a 
-                  href="#forgot" 
+                <a
+                  href="#forgot"
                   onClick={(e) => { e.preventDefault(); alert('Please contact the head office administrator to reset your password.'); }}
                   className="font-bold text-login-green hover:underline"
                 >
@@ -238,35 +259,32 @@ export default function Login({ onLoginSuccess }: LoginProps) {
               </span>
             </div>
 
-            {/* Social Logins */}
-            <div className="grid grid-cols-3 gap-4">
-              <button
-                type="button"
-                onClick={() => alert('SSO with Google is not configured for this admin panel.')}
-                className="flex items-center justify-center py-3 border border-slate-100 rounded-xl hover:bg-slate-50 hover:border-slate-200 transition-all cursor-pointer shadow-sm"
-              >
-                <span className="font-extrabold text-blue-600 text-base">G</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => alert('SSO with Microsoft is not configured for this admin panel.')}
-                className="flex items-center justify-center py-3 border border-slate-100 rounded-xl hover:bg-slate-50 hover:border-slate-200 transition-all cursor-pointer shadow-sm"
-              >
-                <div className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5">
-                  <span className="bg-orange-500 w-1.5 h-1.5 block" />
-                  <span className="bg-green-500 w-1.5 h-1.5 block" />
-                  <span className="bg-blue-500 w-1.5 h-1.5 block" />
-                  <span className="bg-yellow-500 w-1.5 h-1.5 block" />
-                </div>
-              </button>
-              <button
-                type="button"
-                onClick={() => alert('SSO with Apple ID is not configured for this admin panel.')}
-                className="flex items-center justify-center py-3 border border-slate-100 rounded-xl hover:bg-slate-50 hover:border-slate-200 transition-all cursor-pointer shadow-sm"
-              >
-                <span className="font-extrabold text-slate-900 text-lg leading-none">•</span>
-              </button>
-            </div>
+            {/* Social Logins - Google Only */}
+            <button
+              type="button"
+              onClick={() => alert('SSO with Google is not configured for this admin panel.')}
+              className="w-full flex items-center justify-center py-3.5 px-4 border border-slate-200 rounded-xl hover:bg-slate-50 active:scale-[0.99] transition-all cursor-pointer shadow-sm font-bold text-slate-700 text-sm bg-white"
+            >
+              <svg className="w-5 h-5 mr-3 shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  fill="#4285F4"
+                  d="M23.745 12.27c0-.7-.07-1.4-.19-2.07H12v3.9h6.69a5.59 5.59 0 0 1-2.42 3.66v2.96h3.89c2.28-2.1 3.58-5.18 3.58-8.45Z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 24c3.24 0 5.97-1.08 7.96-2.91l-3.89-2.96c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.06C3.26 21.35 7.37 24 12 24Z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.27 14.33A7.18 7.18 0 0 1 4.9 12c0-.81.14-1.6.37-2.33V6.61H1.29A11.94 11.94 0 0 0 0 12c0 1.92.45 3.74 1.29 5.39l3.98-3.06Z"
+                />
+                <path
+                  fill="#EA4335"
+                  d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.22 0 12 0 7.37 0 3.26 2.65 1.29 6.61l3.98 3.06c.95-2.85 3.6-4.92 6.73-4.92Z"
+                />
+              </svg>
+              <span>Continue with Google</span>
+            </button>
           </div>
 
           {/* Footer Copyright */}
@@ -274,7 +292,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
             © 2026 Maitriser Zone. All rights reserved.
           </div>
         </div>
-        
+
       </div>
     </div>
   );
